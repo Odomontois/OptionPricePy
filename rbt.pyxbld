@@ -1,7 +1,7 @@
 def make_ext(modname, pyxfilename):
     from distutils.extension import Extension
     return Extension(name=modname,
-                     sources=[pyxfilename],
+                     sources=[pyxfilename,"IntervalMap.cpp"],
                      libraries=["stdc++"],
                      include_dirs=["."],
                      language='C++')
