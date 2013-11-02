@@ -1,0 +1,5 @@
+*.o
+*.pyc
+*.exe
+*.sublime-project
+*.sublime-workspace
