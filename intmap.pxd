@@ -18,12 +18,14 @@ cdef extern from "IntervalMap.h":
 		IntervalValue * reduce( double) nogil
 		IntervalValue * add(IntervalValue *) nogil
 		IntervalValue * mul(double) nogil
+		
 cdef extern from "IntervalMap.h":
 	cdef cppclass IntervalCache:
 		IntervalCache() nogil except +
 		IntervalCache(IntervalCache*) nogil except +
 		map[double,const IntervalValue*] nogil
 		bool has(double) nogil
+		bool hasUpper(double) nogil
 		IntervalValue * get(double) nogil
 		void put(IntervalValue *)nogil
 

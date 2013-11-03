@@ -32,18 +32,23 @@ IntervalValue::~IntervalValue(){
 	delete this->interval;
 }
 
+
 IntervalCache::IntervalCache():cache(){};
 IntervalCache::IntervalCache(const IntervalCache* other):cache(other->cache){};
 bool IntervalCache::has(double point) const{
 	auto it = cache.lower_bound(point);
 	if (it == cache.end()) return false;
-	if ((*it).second->interval->start > point) return false;
+	if (((*it).second->interval->start) > point) return false;
+	else true;
+}
+bool IntervalCache::hasUpper(double point) const{
+	auto it = cache.lower_bound(point);
+	if (it == cache.end()) return false;
 	else true;
 }
 const IntervalValue* IntervalCache::get(double point) const{
 	auto it = cache.lower_bound(point);
 	if(it == cache.end()) return NULL;
-	if ((*it).second->interval->start > point) return NULL;
 	else return (*it).second;
 }
 void IntervalCache::put(const IntervalValue* value){

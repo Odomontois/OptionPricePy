@@ -6,8 +6,6 @@ from intmap cimport Interval as CppInterval, IntervalValue as CppIntervalValue, 
 from collections import Iterable,defaultdict
 cimport cython
 
-
-
 cdef class Interval:
 	cdef const CppInterval * wrapped
 	property start:
@@ -84,7 +82,10 @@ cdef class IntervalCache:
 	cdef CppIntervalCache wrapped
 
 	cpdef IntervalValue get(self,double point):
-		return _IntervalValue.wrap( self.wrapped.get(point) )
+		return _IntervalValue.wrap(self.wrapped.get(point))
+
+	cpdef bool hasUpper(self, double point):
+		return self.wrapped.hasUpper(point)
 
 	cpdef put(self,IntervalValue value):
 		self.wrapped.put(value.wrapped)
@@ -101,20 +102,22 @@ cdef class IntervalCache:
 	def __contains__(self,point):
 		return self.has(point)
 
-def cached(func):
+def cached(func,cacheAttr=None):
 	"""returns cached version of func 
 	   func must accept single double argument
 	   and return value of type IntervalValue
 	"""
-	cache =  IntervalCache()
+	cache = IntervalCache()
 	def wrapped(val):
 		if val in cache: return cache[val]
 		else: 
 			result = func(val)
 			cache.put(result)
 			return result
+
 	wrapped.cache = cache 
 	return wrapped
+
 
 def levelCached(func):
 	"""returns cached version of func, with multiple caches, differentiated by firs argument
@@ -124,9 +127,12 @@ def levelCached(func):
 	levelCache = defaultdict(IntervalCache)
 	def wrapped(level,val):
 		cache = levelCache[level]
-		if val in cache: return cache[val]
+		if cache.has(val): 
+			return cache[val]
 		else: 
-			result = func(val)
+			result = func(level,val)
+			if not( result.interval.start <= val <= result.interval.end):
+				raise ValueError("Supplied argument{} not in returned interval {}".format(val,result.interval))
 			cache.put(result)
 			return result
 	wrapped.levelCache = levelCache
