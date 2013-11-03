@@ -41,14 +41,10 @@ bool IntervalCache::has(double point) const{
 	if (((*it).second->interval->start) > point) return false;
 	else true;
 }
-bool IntervalCache::hasUpper(double point) const{
-	auto it = cache.lower_bound(point);
-	if (it == cache.end()) return false;
-	else true;
-}
 const IntervalValue* IntervalCache::get(double point) const{
 	auto it = cache.lower_bound(point);
 	if(it == cache.end()) return NULL;
+	if (((*it).second->interval->start) > point) return NULL;
 	else return (*it).second;
 }
 void IntervalCache::put(const IntervalValue* value){

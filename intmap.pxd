@@ -25,7 +25,6 @@ cdef extern from "IntervalMap.h":
 		IntervalCache(IntervalCache*) nogil except +
 		map[double,const IntervalValue*] nogil
 		bool has(double) nogil
-		bool hasUpper(double) nogil
 		IntervalValue * get(double) nogil
 		void put(IntervalValue *)nogil
 

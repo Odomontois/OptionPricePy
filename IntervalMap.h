@@ -37,7 +37,6 @@ public:
 	IntervalCache(const IntervalCache*);
 	std::map<double,const IntervalValue*> cache;
 	bool has(double) const;
-	bool hasUpper(double) const;
 	const IntervalValue* get(double) const;
 	void put(const IntervalValue *);
 };

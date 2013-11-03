@@ -84,9 +84,6 @@ cdef class IntervalCache:
 	cpdef IntervalValue get(self,double point):
 		return _IntervalValue.wrap(self.wrapped.get(point))
 
-	cpdef bool hasUpper(self, double point):
-		return self.wrapped.hasUpper(point)
-
 	cpdef put(self,IntervalValue value):
 		self.wrapped.put(value.wrapped)
 
