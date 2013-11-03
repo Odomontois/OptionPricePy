@@ -1,7 +1,7 @@
 from libcpp.map cimport map
 from libcpp cimport bool
 
-cdef extern from "IntervalMap.h":
+cdef extern from "IntervalMap.h" nogil:
 	cdef cppclass Interval:
 		Interval(double, double) nogil except+
 		Interval(Interval*) nogil except +
@@ -9,7 +9,7 @@ cdef extern from "IntervalMap.h":
 		Interval* intersect(Interval*) nogil
 		Interval* reduce(double)nogil
 
-cdef extern from "IntervalMap.h":
+cdef extern from "IntervalMap.h" nogil:
 	cdef cppclass IntervalValue:
 		IntervalValue(IntervalValue* )nogil except +
 		IntervalValue(double,Interval*)nogil except +
@@ -19,7 +19,7 @@ cdef extern from "IntervalMap.h":
 		IntervalValue * add(IntervalValue *) nogil
 		IntervalValue * mul(double) nogil
 		
-cdef extern from "IntervalMap.h":
+cdef extern from "IntervalMap.h" nogil:
 	cdef cppclass IntervalCache:
 		IntervalCache() nogil except +
 		IntervalCache(IntervalCache*) nogil except +

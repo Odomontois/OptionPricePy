@@ -87,16 +87,16 @@ cdef class IntervalCache:
 	cpdef put(self,IntervalValue value):
 		self.wrapped.put(value.wrapped)
 
-	cpdef bool has(self,double point):
+	cpdef int has(self,double point):
 		return self.wrapped.has(point)
 
 	def __getitem__(self,double point):
 		return self.get(point)
 
-	def __setitem__(self,interval,value):
+	def __setitem__(self, interval, double value):
 		self.put(IntervalValue(value,interval))
 
-	def __contains__(self,point):
+	def __contains__(self,double point):
 		return self.has(point)
 
 def cached(func,cacheAttr=None):
@@ -117,12 +117,12 @@ def cached(func,cacheAttr=None):
 
 
 def levelCached(func):
-	"""returns cached version of func, with multiple caches, differentiated by firs argument
-	   func must accept two arguments, second should be of type double
+	"""returns cached version of func, with multiple caches, recognized by the first argument
+	   func must accept two arguments, second should be of type double,
 	   and return value of type IntervalValue
 	"""
 	levelCache = defaultdict(IntervalCache)
-	def wrapped(level,val):
+	def wrapped(level,double val):
 		cache = levelCache[level]
 		if cache.has(val): 
 			return cache[val]

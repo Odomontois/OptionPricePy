@@ -1,4 +1,13 @@
 import json
+from random import random
+def randConfig(n): return Variant({
+	"X" : random(),
+	"deltaT": random(),
+	"S":random(),
+	"u":[random() for i in range(n)],
+	"pu":[random() for i in range(n)],
+	"r":random()
+})
 
 class Point:
 	def __init__(self,u,d,pu,pd,pm):
@@ -17,11 +26,10 @@ class Variant:
 		self.points = [Point(u,d,pu,pd,pm ) for u,d,pu,pd,pm in zip(self.u,self.d,self.pu,self.pd,self.pm)]
 
 class Config:
-	def __init__(self,name):
-		cfg = json.load(open(name))
+	def __init__(self,cfg):
 		for name in cfg:
 			variant = Variant(cfg[name])
 			setattr(self,name,variant)
 
-cfg = Config("config.json")
+cfg = Config(json.load(open("config.json")))
 
