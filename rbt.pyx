@@ -1,7 +1,8 @@
 from libcpp.map cimport map 
 from libcpp.utility cimport pair
+from libcpp cimport bool
 from cython.operator import dereference as deref
-from intmap cimport Interval as CppInterval, IntervalValue as CppIntervalValue
+from intmap cimport Interval as CppInterval, IntervalValue as CppIntervalValue, IntervalCache as CppIntervalCache
 from collections import Iterable
 cimport cython
 
@@ -50,7 +51,7 @@ cdef class IntervalValue:
 		wrapper.wrapped = intervalValue
 		return wrapper			
 
-	def __init__(self,double value, object interval):
+	def __init__(self,double value, interval):
 		cdef Interval int
 		if type(interval) == Interval:
 			int = interval
@@ -76,6 +77,30 @@ cdef class IntervalValue:
 
 	def __str__(self):
 		return "{{{}}}{}".format(self.value, self.interval)
+
+cdef IntervalValue _IntervalValue = IntervalValue.__new__(IntervalValue)
+
+cdef class IntervalCache:
+	cdef CppIntervalCache wrapped
+
+	cpdef IntervalValue get(self,double point):
+		return _IntervalValue.wrap( self.wrapped.get(point) )
+
+	cpdef put(self,IntervalValue value):
+		self.wrapped.put(value.wrapped)
+
+	cpdef bool has(self,double point):
+		return self.wrapped.has(point)
+
+	def __getitem__(self,double point):
+		return self.get(point)
+
+	def __setitem__(self,interval,value):
+		self.put(IntervalValue(value,interval))
+
+	def __contains__(self,point):
+		return self.has(point)
+
 
 
 

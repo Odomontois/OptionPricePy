@@ -4,4 +4,5 @@ def make_ext(modname, pyxfilename):
                      sources=[pyxfilename,"IntervalMap.cpp"],
                      libraries=["stdc++"],
                      include_dirs=["."],
-                     language='C++')
+                     language='C++',
+                     extra_compile_args =["-std=gnu++0x"])
