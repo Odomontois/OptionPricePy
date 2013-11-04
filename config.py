@@ -1,5 +1,5 @@
 import json
-from random import random
+from random import random,gauss
 def randConfig(n): return Variant({
 	"X" : random(),
 	"deltaT": random(),
@@ -9,6 +9,16 @@ def randConfig(n): return Variant({
 	"r":random()
 })
 
+def gaussConfig(n,sigma): 
+	random = lambda : min((gauss(1 - 2*sigma,sigma),1))
+	return Variant({
+	"X" : random(),
+	"deltaT": random(),
+	"S":random(),
+	"u":[random() for i in range(n)],
+	"pu":[random() for i in range(n)],
+	"r":random()
+})
 class Point:
 	def __init__(self,u,d,pu,pd,pm):
 		self.u = u
